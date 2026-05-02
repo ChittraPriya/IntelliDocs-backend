@@ -19,7 +19,7 @@ const userSchema = new mongoose.Schema({
     notifications: [{
         message: String, 
         read:{type:Boolean,default: false},
-        createAt: {type:Date, default: Date.now} }]
+        createdAt: {type:Date, default: Date.now} }]
 
 
 },{timestamps: true})

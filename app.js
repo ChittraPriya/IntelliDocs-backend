@@ -13,6 +13,7 @@ app.use(express.json());
 //cors
 app.use(cors());
 
+//middleware to parse cookies
 app.use(cookieParser());
 
 //Routes
