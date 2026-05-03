@@ -1,5 +1,6 @@
 const Document = require('../models/documentModel')
-const User = require('../models/userModel')
+const User = require('../models/userModel');
+const { createShareEmailTemplate } = require('../utils/emailTemplate');
 
 const documentController = {
     createDocument: async(req,res) => {
@@ -149,7 +150,22 @@ const documentController = {
 
             await doc.save()
 
-            res.status(200).json({message:"Document Shared Successfully"})
+            //send Email
+            const html = createShareEmailTemplate({
+                    receiverName: user.name,
+                    ownerName: req.user.name || "Someone",
+                    docTitle: doc.title,
+                    role: role || "viewer",
+                    link: `http://localhost:5000/documents/${doc._id}`
+                    });
+
+            await sendEmail({
+            to: email,
+            subject: `📄 ${req.user.name} shared a document with you`,
+            html
+            });
+
+            res.status(200).json({message:"Document Shared and Email Send Successfully"})
         } catch (error) {
             res.status(500).json({mesasge:"Failed to share Document",error:error.message})
         }
